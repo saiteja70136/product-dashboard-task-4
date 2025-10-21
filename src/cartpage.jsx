@@ -45,7 +45,15 @@ function GetDataFromApi({fun}){
 }
 function SetCart({id,setapi}){
     let hold=setapi.find(a=>a.id===Number(id))
-    console.log(hold)
+    return(
+     <div>
+        <div style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
+            <img src={hold.image} alt={hold.title} width={100} />
+            <h3>{hold.title}</h3>
+            <p>Price: ${hold.price}</p>
+        </div>
+     </div>
+    )
 }
 function SetProducts({tot,api}){
     useEffect(()=>{
@@ -56,6 +64,7 @@ function SetProducts({tot,api}){
            total+=hold[0].price
         }
        )
+       console.log("hello world")
        tot(total)
     },[])
     return(
@@ -67,12 +76,18 @@ function SetProducts({tot,api}){
 function Fun1(){
     const[data,setData] = useState([])
     const[total,setTotal] = useState(0)
+    function clearCart(){
+        localStorage.removeItem('cartitems')
+        window.location.href='index.html'
+    }
     return(
-        <>
+        <div style={{maxWidth:'700px',marginLeft:'auto',marginRight:'auto'}}>
+            <div>your orders</div>
             <GetDataFromApi fun={setData}/>
             {data.length!=0&&<SetProducts tot={setTotal} api={data}/>}
-            {console.log(total)}
-        </>
+            <h3>Total Price ${total.toFixed(2)}</h3>
+            <button onClick={clearCart}>place your order</button>
+        </div> 
     )
 }
 function App(){

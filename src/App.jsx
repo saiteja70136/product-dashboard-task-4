@@ -1,4 +1,4 @@
-import { useState,useEffect,useRef } from 'react'
+import { useState,useEffect,useRef, Fragment } from 'react'
 const products = JSON.parse(localStorage.getItem('cartitems')) || [];
 function Doelement({id,val}){
     const reff= useRef(null)
@@ -10,12 +10,13 @@ function Doelement({id,val}){
       <div className='product-card'>
         <img className='imgsec' src={val.image}/>
         <p>{val.title}</p>
-        <p>{val.price}</p>
+        <p>${val.price}</p>
         <button ref={reff} value={id} onClick={printRef} className='buy-btn'>Buy</button>
       </div>
     )
 }
 function ForGetData({props}){
+    console.log(props)
     return(
       <div className='grid-container'>
          {props.map((ele)=><Doelement key={ele.id} val={ele} id={ele.id}/>)}
@@ -28,6 +29,7 @@ function Header({alldata,filterdata}){
    useEffect(()=>{
      let tolowc=inputfield.toLowerCase()
      let hold = alldata.filter(e=>e.title.toLowerCase().includes(tolowc))
+     console.log(hold)
      filterdata(hold)
    },[inputfield])
    function setInputData(event){
@@ -67,12 +69,25 @@ function ForDashboard(){
     </>
   )
 }
-function App() {
+function Counter() {
+  const prevCountRef = useRef(0);
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    prevCountRef.current = count;
+  }, [count]);
   return (
     <div>
-      <ForDashboard />
+      <p>Current count: {count}</p>
+      <p>Previous count: {prevCountRef.current}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
     </div>
+  );
+}
+function App() {
+  return (
+    <>
+      <ForDashboard />
+    </>
   )
 }
-
 export default App
